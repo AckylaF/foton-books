@@ -1,7 +1,12 @@
 import BookList from './BookList';
+import Header from './Header';
 
-export default function Main() {
+
+export default function Main({ books }) {
   return (
-    <BookList />
+    <>
+      <Header home/>
+      <BookList books={books} />
+    </>
   )
 }

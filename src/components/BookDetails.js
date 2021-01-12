@@ -1,5 +1,10 @@
-export default function BookDetails() {
+import Header from './Header';
+
+export default function BookDetails({ book }) {
   return (
-    <h1>Test</h1>
+    <>
+      <Header />
+      <img src={book.volumeInfo.imageLinks.smallThumbnail} alt={book.volumeInfo.title} />
+    </>
   )
 }
