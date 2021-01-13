@@ -1,10 +1,6 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import req from "superagent";
-
-import { ACTIONS } from '../store/actions';
 
 const Container = styled.header`
   display: grid;
@@ -50,26 +46,8 @@ const Button = styled.button`
   box-shadow: 0px 2px 15px -6px #212529;
 `;
 
-export default function Header({ home }) {
-  const dispatch = useDispatch();
-
+export default function Header({ home, query, setQuery, fetchBooks }) {
   const [isSearchHidden, setIsSearchHidden] = useState(true);
-
-  const [query, setQuery] = useState('')
-
-  const fetchBooks = async () => {
-    //I DIDN'T WANT TO REPEAT THIS FUNCTION BUT COULDN'T THINK OF A WAY NOT TO
-    await req
-      .get("https://www.googleapis.com/books/v1/volumes")
-      .query({ q: query })
-      .query({ key: 'AIzaSyCRiTSU_Si_zWNVrRtRPlp6UKpYmBXY3Ts' })
-      .then((res) =>
-        dispatch({ type: ACTIONS.SET_BOOKS, books: res.body.items })
-      )
-      .catch((err) => {
-        throw err;
-      });
-  };
 
   return (
     <Container isSearchHidden={isSearchHidden}>
@@ -90,7 +68,7 @@ export default function Header({ home }) {
           id="search"
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button type="submit" onClick={(e) => {e.preventDefault(); fetchBooks()}}>
+        <Button type="submit" onClick={(e) => {e.preventDefault(); fetchBooks(query)}}>
           Go!
         </Button>
       </form>
