@@ -2,37 +2,52 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import req from "superagent";
 
 import { ACTIONS } from '../store/actions';
 
 const Container = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10%, 1fr));
+  grid-row-gap: .5rem;
+  justify-items: center;
 
-  h1,
-  i {
+  overflow: hidden;
+  height: ${props => props.isSearchHidden ? '2rem' : 'unset'};
+  transition: .25s;
+
+  h1, i {
     font-size: 1.5rem;
   }
+  i.fa-bars, > a {
+    justify-self: start;
+  }
+  i.fa-search{
+    justify-self: end;
+  }
   form {
-    position: relative;
+    grid-area: 2/1/2/4;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
   }
 `;
 
 const InputField = styled.input`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   border-radius: 4px;
   padding: 0.5rem;
+`;
 
-  position: absolute;
-  right: 2rem;
-  bottom: -0.5rem;
-
-  width: ${(props) => (props.hidden ? "0" : "17rem")};
-  visibility: ${(props) => (props.hidden ? "hidden" : "visible")};
-
-  transition: 0.3s;
+const Button = styled.button`
+  font-size: 1rem;
+  font-weight: bold;
+  padding: .8rem;
+  color: #FFF;
+  background-color: #549AE6;
+  text-transform: uppercase;
+  border-radius: 50px;
+  box-shadow: 0px 2px 15px -6px #212529;
 `;
 
 export default function Header({ home }) {
@@ -40,10 +55,24 @@ export default function Header({ home }) {
 
   const [isSearchHidden, setIsSearchHidden] = useState(true);
 
-  const toggleSearchArea = () => setIsSearchHidden(!isSearchHidden);
+  const [query, setQuery] = useState('')
+
+  const fetchBooks = async () => {
+    //I DIDN'T WANT TO REPEAT THIS FUNCTION BUT COULDN'T THINK OF A WAY NOT TO
+    await req
+      .get("https://www.googleapis.com/books/v1/volumes")
+      .query({ q: query })
+      .query({ key: 'AIzaSyCRiTSU_Si_zWNVrRtRPlp6UKpYmBXY3Ts' })
+      .then((res) =>
+        dispatch({ type: ACTIONS.SET_BOOKS, books: res.body.items })
+      )
+      .catch((err) => {
+        throw err;
+      });
+  };
 
   return (
-    <Container>
+    <Container isSearchHidden={isSearchHidden}>
       {home ? (
         <i className="fa fa-bars"></i>
       ) : (
@@ -52,16 +81,18 @@ export default function Header({ home }) {
         </Link>
       )}
       <h1>Books</h1>
+      <i className="fa fa-search" onClick={() => setIsSearchHidden(!isSearchHidden)}></i>
       <form>
-        <i className="fa fa-search" onClick={toggleSearchArea}></i>
         <label htmlFor="search"></label>
         <InputField
           type="text"
           name="search"
           id="search"
-          hidden={isSearchHidden}
-          onChange={(e) => dispatch({ type: ACTIONS.SET_QUERY, query: e.target.value })}
+          onChange={(e) => setQuery(e.target.value)}
         />
+        <Button type="submit" onClick={(e) => {e.preventDefault(); fetchBooks()}}>
+          Go!
+        </Button>
       </form>
     </Container>
   );

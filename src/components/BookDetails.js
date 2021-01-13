@@ -6,6 +6,7 @@ const GridContainer = styled.article`
   display: grid;
   grid-template-columns: 35% 60%;
   grid-gap: 10% 5%;
+  margin-top: 1rem;
 
   img{
     width: 100%;
