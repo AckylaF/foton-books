@@ -3,12 +3,12 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Main from './components/Main';
 import BookDetails from './components/BookDetails';
 
-export default function Routes({ books }) {
+export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={() => <Main books={books} />} />
-        <Route exact path="/book/:bookId" component={({ match }) => <BookDetails book={books.filter(book => book.id === match.params.bookId)[0]} />} />
+        <Route exact path="/" component={() => <Main />} />
+        <Route exact path="/book/:bookId" component={BookDetails} />
         <Redirect to="/" />
       </Switch>
     </BrowserRouter>
