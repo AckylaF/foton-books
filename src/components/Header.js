@@ -1,6 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import styled from "styled-components";
+
+import { ACTIONS } from '../store/actions';
 
 const Container = styled.header`
   display: grid;
@@ -15,7 +18,7 @@ const Container = styled.header`
   h1, i {
     font-size: 1.5rem;
   }
-  i.fa-bars, > a {
+  i.fa-bars, i.fa-arrow-left {
     justify-self: start;
   }
   i.fa-search{
@@ -46,18 +49,23 @@ const Button = styled.button`
   box-shadow: 0px 2px 15px -6px #212529;
 `;
 
-export default function Header({ home, query, setQuery, fetchBooks }) {
+export default function Header({ home }) {
+  const dispatch = useDispatch();
+
+  const history = useHistory();
+
   const [isSearchHidden, setIsSearchHidden] = useState(true);
+
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    dispatch({ type: ACTIONS.SET_QUERY, query });
+    
+  }, [query, dispatch])
 
   return (
     <Container isSearchHidden={isSearchHidden}>
-      {home ? (
-        <i className="fa fa-bars"></i>
-      ) : (
-        <Link to="/">
-          <i className="fa fa-arrow-left"></i>
-        </Link>
-      )}
+      {home ? <i className="fa fa-bars"></i> : <i className="fa fa-arrow-left" onClick={history.goBack}></i>}
       <h1>Books</h1>
       <i className="fa fa-search" onClick={() => setIsSearchHidden(!isSearchHidden)}></i>
       <form>
@@ -68,7 +76,7 @@ export default function Header({ home, query, setQuery, fetchBooks }) {
           id="search"
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button type="submit" onClick={(e) => {e.preventDefault(); fetchBooks(query)}}>
+        <Button type="submit" onClick={(e) => {e.preventDefault(); history.push(`/books/${query}`)}}>
           Go!
         </Button>
       </form>

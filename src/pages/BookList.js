@@ -28,13 +28,7 @@ function RenderBook({ books }) {
 }
 
 export default function BookList() {
-  const books = useSelector(state => {
-    if (state !== undefined) {
-      return state.books;
-    }
-
-    return Array(0);
-  });
+  const books = useSelector(state => state.books.volumes);
 
   return (
     <GridContainer>

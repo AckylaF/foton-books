@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+
 import Header from './Header';
 
 const GridContainer = styled.article`
@@ -73,8 +75,8 @@ const Button = styled.button`
 
 const HeartIcon = styled.i`
   font-size: 1.3rem;
-  color: white;
-  background-color: red;
+  color: ${props => props.liked ? 'red' : '#FFF'};
+  background-color: ${props => props.liked ? '#ffffff8a' : 'red'};
   padding: .7rem;
   border-radius: 50%;
 `;
@@ -98,15 +100,18 @@ const Description = styled.article`
 `;
 
 export default function BookDetails({ match }) {
-  const book =  useSelector(state => {
-    if (state !== undefined) {
-      return state.books.filter(book => book.id === match.params.bookId)[0];
-    }
-
-    return {};
-  });
+  const book =  useSelector(state => state.books.volumes.filter(book => book.id === match.params.bookId)[0]);
 
   const price = book.saleInfo.saleability === 'FOR_SALE' ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(book.saleInfo.listPrice.amount) : 'Not for sale';
+  
+  const [liked, setLiked] = useState(false);
+
+  const favorites = useSelector(state => state.likedBooks.favorites)
+  
+  const handleLike = () => {
+    setLiked(!liked);
+    localStorage.setItem('likedBooks', JSON.stringify([...favorites, book.id]));
+  }
 
   return (
     <>
@@ -115,7 +120,7 @@ export default function BookDetails({ match }) {
         <img src={book.volumeInfo.imageLinks.thumbnail} alt={book.volumeInfo.title} />
         <Details>
           <Title>{book.volumeInfo.title}</Title>
-          <Author>by {book.volumeInfo.authors[0]}</Author>
+          <Author>by {book.volumeInfo.authors}</Author>
           <Block>
             <span>{price}</span>
           </Block>
@@ -123,7 +128,7 @@ export default function BookDetails({ match }) {
         <PageCount>{book.volumeInfo.pageCount} pages</PageCount>
         <Actions>
           <Button>Buy</Button>
-          <HeartIcon className="fa fa-heart"></HeartIcon>
+          <HeartIcon className="fa fa-heart" liked={liked} onClick={handleLike}></HeartIcon>
         </Actions>
       </GridContainer>
       <Description>
