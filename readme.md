@@ -17,7 +17,7 @@ then:
 ```
 
 or simply visit the link:
-  [Shoes.on](https://fotonbooks.herokuapp.com/)
+  [Books](https://fotonbooks.herokuapp.com/)
 
 ### Meta
 
