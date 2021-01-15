@@ -23,7 +23,7 @@ export default function Main({ match }) {
       .get("https://www.googleapis.com/books/v1/volumes")
       .query({ q: match.params.topic })
       .query({ startIndex })
-      .query({ key: 'AIzaSyCRiTSU_Si_zWNVrRtRPlp6UKpYmBXY3Ts' })
+      .query({ key: process.env.REACT_APP_USER_KEY })
       .then((res) =>
         dispatch({ type: ACTIONS.SET_BOOKS, books: res.body.items })
       )
