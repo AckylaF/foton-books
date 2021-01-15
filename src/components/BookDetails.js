@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Header from './Header';
+import ActionButton from './Button';
 
 const GridContainer = styled.article`
   display: grid;
@@ -13,6 +14,18 @@ const GridContainer = styled.article`
   img{
     width: 100%;
     box-shadow: 0px 2px 15px -2px #212529;
+  }
+
+  @media screen and (min-width: 500px){
+    grid-template-columns: 25% 25%;
+    grid-gap: 5% 0;
+    height: 40vh;
+    margin-top: 5rem;
+
+    img{
+      width: 50%;
+      justify-self: center;
+    }
   }
 `;
 
@@ -59,18 +72,19 @@ const Actions = styled.section`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-`;
 
-const Button = styled.button`
-  font-size: 1rem;
-  font-weight: bold;
-  padding: .8rem;
-  width: 60%;
-  color: #FFF;
-  background-color: #549AE6;
-  text-transform: uppercase;
-  border-radius: 50px;
-  box-shadow: 0px 2px 20px -6px #212529;
+  button{
+    text-transform: uppercase;
+    width: 60%;
+  }
+
+  @media screen and (min-width: 1024px) {
+    justify-content: flex-start;
+
+    button{
+      margin-right: .5rem;
+    }
+  }
 `;
 
 const HeartIcon = styled.i`
@@ -79,12 +93,13 @@ const HeartIcon = styled.i`
   background-color: ${props => props.liked ? '#ffffff8a' : 'red'};
   padding: .7rem;
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const Description = styled.article`
   background-color: #FFF;
   width: 100vw;
-  height: 55%;
+  height: 50%;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -96,6 +111,13 @@ const Description = styled.article`
     line-height: 2rem;
     font-size: 1.1rem;
     text-align: justify;
+  }
+
+  @media screen and (min-width: 500px){
+    right: 0;
+    left: unset;
+    height: 80vh;
+    width: 50%;
   }
 `;
 
@@ -127,7 +149,7 @@ export default function BookDetails({ match }) {
         </Details>
         <PageCount>{book.volumeInfo.pageCount} pages</PageCount>
         <Actions>
-          <Button>Buy</Button>
+          <ActionButton text="Buy" />
           <HeartIcon className="fa fa-heart" liked={liked} onClick={handleLike}></HeartIcon>
         </Actions>
       </GridContainer>

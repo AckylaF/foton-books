@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import styled from "styled-components";
 
 import { ACTIONS } from '../store/actions';
+import ActionButton from './Button';
 
 const Container = styled.header`
   display: grid;
@@ -30,23 +31,18 @@ const Container = styled.header`
     align-items: center;
     gap: .5rem;
   }
+
+  @media screen and (min-width: 1024px){
+    i, button {
+      cursor: pointer;
+    }
+  }
 `;
 
 const InputField = styled.input`
   font-size: 1.3rem;
   border-radius: 4px;
   padding: 0.5rem;
-`;
-
-const Button = styled.button`
-  font-size: 1rem;
-  font-weight: bold;
-  padding: .8rem;
-  color: #FFF;
-  background-color: #549AE6;
-  text-transform: uppercase;
-  border-radius: 50px;
-  box-shadow: 0px 2px 15px -6px #212529;
 `;
 
 export default function Header({ home }) {
@@ -76,9 +72,11 @@ export default function Header({ home }) {
           id="search"
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Button type="submit" onClick={(e) => {e.preventDefault(); history.push(`/books/${query}`)}}>
-          Go!
-        </Button>
+        <ActionButton 
+          type="submit" 
+          fn={(e) => {e.preventDefault(); history.push(`/books/${query}`)}} 
+          text="Go!"
+        />
       </form>
     </Container>
   );
