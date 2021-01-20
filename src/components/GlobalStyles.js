@@ -1,4 +1,4 @@
-import { createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle, css } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle(
   () => css`
@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle(
       box-sizing: border-box;
     }
     body {
-      font-family: "Roboto", sans-serif;
+      font-family: 'Roboto', sans-serif;
       color: #333;
       background-color: #ffe207;
       padding: 1.5rem 1rem;
@@ -23,6 +23,6 @@ const GlobalStyle = createGlobalStyle(
       list-style-type: none;
     }
   `
-);
+)
 
-export default GlobalStyle;
+export default GlobalStyle

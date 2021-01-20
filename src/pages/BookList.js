@@ -1,6 +1,7 @@
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 const GridContainer = styled.ul`
   display: grid;
@@ -17,15 +18,15 @@ const GridContainer = styled.ul`
     grid-template-columns: repeat(auto-fit, minmax(10%, 1fr));
     grid-gap: 5% 2%;
   }
-`;
+`
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
-`;
+`
 
 function RenderBook({ books }) {
-  return books.map((book) => (
+  return books.map(book => (
     <li key={book.id}>
       <Link to={`/book/${book.id}`}>
         <Image
@@ -34,15 +35,15 @@ function RenderBook({ books }) {
         />
       </Link>
     </li>
-  ));
+  ))
 }
 
 export default function BookList() {
-  const books = useSelector(state => state.books.volumes);
+  const { volumes } = useSelector(state => state.books)
 
   return (
     <GridContainer>
-      <RenderBook books={books} />
+      <RenderBook books={volumes} />
     </GridContainer>
-  );
+  )
 }

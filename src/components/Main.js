@@ -1,56 +1,56 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import req from "superagent";
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-import { ACTIONS } from "../store/actions";
+import { action } from 'typesafe-actions'
+import Types from '../store/modules/books/types'
 
-import BookList from '../pages/BookList';
-import Header from './Header';
-import ActionButton from './Button';
+import BookList from '../pages/BookList'
+import Header from './Header'
+import ActionButton from './Button'
 
 const Wrapper = styled.main`
-  > button{
+  > button {
     margin: 8rem 45% 0;
   }
-`;
+`
 
 export default function Main({ match }) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const fetchBooks = async ( startIndex = 0) => {
-    await req
-      .get("https://www.googleapis.com/books/v1/volumes")
-      .query({ q: match.params.topic })
-      .query({ startIndex })
-      .query({ key: process.env.REACT_APP_USER_KEY })
-      .then((res) =>
-        dispatch({ type: ACTIONS.SET_BOOKS, books: res.body.items })
-      )
-      .catch((err) => {
-        throw err;
-      });
-  };
+  const { loading } = useSelector(state => state.books)
+
+  // eslint-disable-next-line prefer-const
+  let [startIndex, setStartIndex] = useState(0)
+
+  const findMore = () => {
+    setStartIndex((startIndex += 10))
+    dispatch(
+      action(Types.FETCH_REQUEST, {
+        query: match.params.topic,
+        startIndex
+      })
+    )
+  }
 
   useEffect(() => {
-    fetchBooks(); 
-  })
-
-  let startIndex = 0;
-  const findMore = () => {
-    startIndex += 10;
- 
-    fetchBooks(startIndex);
-  }
+    dispatch(action(Types.FETCH_REQUEST, { query: match.params.topic }))
+  }, [match.params.topic])
 
   return (
     <Wrapper>
       <Header />
-      <BookList />
-      <ActionButton 
-        fn={findMore} 
-        text={<i className="fa fa-arrow-down"></i>}
-      />
+      {loading ? (
+        <h1>Loading</h1>
+      ) : (
+        <>
+          <BookList />
+          <ActionButton
+            fn={findMore}
+            text={<i className="fa fa-arrow-down" />}
+          />
+        </>
+      )}
     </Wrapper>
   )
 }

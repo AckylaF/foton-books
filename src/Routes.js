@@ -1,8 +1,9 @@
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-import Home from './pages/Home';
-import Main from './components/Main';
-import BookDetails from './components/BookDetails';
+import Home from './pages/Home'
+import Main from './components/Main'
+import BookDetails from './components/BookDetails'
 
 export default function Routes() {
   return (

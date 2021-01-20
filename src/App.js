@@ -1,5 +1,6 @@
-import Routes from "./Routes";
-import GlobalStyle from "./components/GlobalStyles";
+import React from 'react'
+import Routes from './Routes'
+import GlobalStyle from './components/GlobalStyles'
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <GlobalStyle />
       <Routes />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
